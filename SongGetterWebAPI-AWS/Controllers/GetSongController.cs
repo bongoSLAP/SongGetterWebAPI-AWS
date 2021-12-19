@@ -39,7 +39,7 @@ namespace SongGetterWebAPI_AWS.GetSongController
             return await Task.Run(() => Youtube.DownloadVideoAsMp3(youtube, SongRequest.Url, pathInfo));
         }
 
-        public async Task<HttpResponseMessage> GetSongFromLib(string Url)
+        public async Task<IActionResult> GetSongFromLib(string Url)
         {
             System.Diagnostics.Debug.WriteLine("executing GetSongFromLib");
 
@@ -52,7 +52,7 @@ namespace SongGetterWebAPI_AWS.GetSongController
             var pathInfo = await Task.Run(() => QueryLib(songRequest));
 
             var filePath = Path.Combine(pathInfo.FilePath, pathInfo.FileName);
-            return await Task.Run(() => ResponseHelper.ConstructResponse(pathInfo, filePath, "audio/mpeg"));
+            return await Task.Run(() => ResponseHelper.ConstructResponse(this, pathInfo, filePath, "audio/mpeg"));
         }
     }
 }

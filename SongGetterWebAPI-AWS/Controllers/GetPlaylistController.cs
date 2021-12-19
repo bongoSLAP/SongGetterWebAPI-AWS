@@ -61,10 +61,9 @@ namespace SongGetterWebAPI_AWS.GetPlaylistController
                 await Task.Run(() => ZipFile.CreateFromDirectory(sourceDirectory, targetFile));
             }
             return zipPathInfo;
-
         }
 
-        public async Task<HttpResponseMessage> GetPlaylistFromLib(string Url)
+        public async Task<IActionResult> GetPlaylistFromLib(string Url)
         {
             System.Diagnostics.Debug.WriteLine("executing GetPlaylistFromLib");
 
@@ -77,7 +76,7 @@ namespace SongGetterWebAPI_AWS.GetPlaylistController
             var pathInfo = await Task.Run(() => QueryLib(songRequest));
 
             var filePath = MyServer.MapPath($"~/App_Data/Zips/{ pathInfo.FileName}");
-            return await Task.Run(() => ResponseHelper.ConstructResponse(pathInfo, filePath, "application/zip"));
+            return await Task.Run(() => ResponseHelper.ConstructResponse(this, pathInfo, filePath, "application/zip"));
         }
     }
 }
